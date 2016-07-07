@@ -158,16 +158,23 @@ class ApiController {
      */
     public function getProductsByCategoriesAction($id, Application $app){
         $categories = $app['dao.category']->findAll();
-        var_dump($categories);
         $responseData = array(array());
-
         foreach ($categories as $category) {
+            $categoryData = $this->buildCategoryArray($category);
+
             $products = $app['dao.product']->findProductsByStoreIdCategoryId($id, $category->getId());
-            //$products = $app['dao.product']->findProductByCategoryId($category->getId());
-            var_dump($products);
-        //    $responseData[] = $this->buildCategoryArray($category);
+
+            foreach ($products as $product){
+                $tmp = array();
+                $tmp = $this->buildProductArray($product);
+                $tmp['price'] = $app['dao.product']->getProductPrice($tmp['id']);
+                $tmp['quantity'] = $app['dao.product']->getProductQuantity($tmp['id']);
+                $categoryData['product'] = $tmp;
+                $productsData[] = $this->buildProductArray($product);
+                $responseData[] = $categoryData;
+            }
         }
-        return null;
+        return $app->json($responseData);
     }
     public function getSellsAction(Application $app){
         $sells = $app['dao.sell']->findAll();
@@ -203,17 +210,16 @@ class ApiController {
      */
     protected function buildCategoryArray(Category $category) {
         $data  = array(
-            'Id_Categorie' => $category->getId(),
-            'Libelle' => $category->getLabel(),
+            'id' => $category->getId(),
+            'name' => $category->getLabel(),
         );
         return $data;
     }
     protected function buildProductArray(Product $product) {
         $data  = array(
-            'Id_Produit' => $product->getId(),
+            'id' => $product->getId(),
             'Id_Categorie' => $product->getIdCategory(),
-            'Id_Stock' => $product->getIdStock(),
-            'Libelle' => $product->getLabel(),
+            'name' => $product->getLabel(),
         );
         return $data;
     }

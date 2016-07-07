@@ -32,27 +32,49 @@ class ProductDAO extends DAO
             $productID = $row['Id_Produit'];
             $products[$productID] = $this->buildDomainObject($row);
         }
+
         return $products;
 
     }
     public function findProductsByStoreIdCategoryId($id_store, $id_category){
-        $sql = "select * from produit p INNER JOIN tl_produit_magasin t ON p.Id_Produit=t.Id_Produit INNER JOIN categorie c ON c.Id_Categorie = p.Id_Categorie WHERE t.Id_Magasin = ? AND c.Id_Categorie = ?";
-        $result = $this->getDb()->fetchAssoc($sql, array($id_store, $id_category));
-
-        // Convert query result to an array of domain objects
+        $sql = "select p.* from produit p INNER JOIN tl_produit_magasin t ON p.Id_Produit=t.Id_Produit INNER JOIN categorie c ON c.Id_Categorie = p.Id_Categorie WHERE t.Id_Magasin = ? AND c.Id_Categorie = ?";
+        $result = $this->getDb()->fetchAll($sql, array($id_store, $id_category));
         $products = array();
         foreach ($result as $row) {
-            $productID = $row['Id_Produit'];
-            $products[$productID] = $this->buildDomainObject($row);
+            if($row) {
+                $productID = $row['Id_Produit'];
+                $products[$productID] = $this->buildDomainObject($row);
+            }
         }
         return $products;
     }
+    public function getProductPrice($id) {
+        $sql = "select t.Prix_HT from tl_produit_magasin t where Id_Produit=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+        if ($row)
+            return $row['Prix_HT'];
+        else
+            throw new \Exception("No product matching id " . $id);
+
+        return $products;
+
+    }
+    public function getProductQuantity($id) {
+        $sql = "select s.Quantite from stock s where Id_Produit=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+        if ($row)
+            return $row['Quantite'];
+        else
+           // throw new \Exception("No product matching id " . $id);
+
+        return $products;
+
+    }
     protected function buildDomainObject($row) {
         $product = new Product();
-        $product->setId('Id_Produit');
-        $product->setIdCategory('Id_Categorie');
-        $product->setIdStock('Id_Stock');
-        $product->setLabel('Libelle');
+        $product->setId($row['Id_Produit']);
+        $product->setIdCategory($row['Id_Categorie']);
+        $product->setLabel($row['Libelle']);
         return $product;
     }
 }
