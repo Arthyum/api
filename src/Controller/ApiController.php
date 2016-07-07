@@ -111,7 +111,7 @@ class ApiController {
         }
         $data[] = $request->request->get('data');
         foreach ($data as $donnee){
-            
+
         }
     }
     /**
