@@ -24,6 +24,23 @@ class Stock
      */
     private $id_stock;
 
+    private $id_product;
+
+    /**
+     * @return mixed
+     */
+    public function getIdProduct()
+    {
+        return $this->id_product;
+    }
+
+    /**
+     * @param mixed $id_product
+     */
+    public function setIdProduct($id_product)
+    {
+        $this->id_product = $id_product;
+    }
     /**
      * @return int
      */

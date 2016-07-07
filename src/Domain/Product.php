@@ -35,10 +35,7 @@ class Product
     {
         $this->id_category = $id_category;
     }
-    /**
-     * @var integer
-     */
-    private $id_stock;
+
     /**
      * @var string
      */
@@ -59,22 +56,7 @@ class Product
     {
         $this->id = $id;
     }
-
-    /**
-     * @return int
-     */
-    public function getIdStock()
-    {
-        return $this->id_stock;
-    }
-
-    /**
-     * @param int $id_stock
-     */
-    public function setIdStock($id_stock)
-    {
-        $this->id_stock = $id_stock;
-    }
+    
 
     /**
      * @return string

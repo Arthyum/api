@@ -61,11 +61,20 @@ $app['dao.comment'] = $app->share(function ($app) {
     $commentDAO->setUserDAO($app['dao.user']);
     return $commentDAO;
 });
-$app['dao.categorie'] = $app->share(function ($app) {
+$app['dao.category'] = $app->share(function ($app) {
     return new api\DAO\CategoryDAO($app['db']);
 });
 $app['dao.product'] = $app->share(function ($app) {
     return new api\DAO\ProductDAO($app['db']);
+});
+$app['dao.sell'] = $app->share(function ($app) {
+    return new api\DAO\SellDAO($app['db']);
+});
+$app['dao.country'] = $app->share(function ($app) {
+    return new api\DAO\CountryDAO($app['db']);
+});
+$app['dao.shop'] = $app->share(function ($app) {
+    return new api\DAO\ShopDAO($app['db']);
 });
 // Register error handler
 $app->error(function (\Exception $e, $code) use ($app) {
