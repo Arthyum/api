@@ -49,6 +49,15 @@ class CategoryDAO extends DAO
             throw new \Exception("No category matching id " . $id);
     }
 
+    public function findCategoryIdByIdProduct($id){
+        $sql = "select * from categorie where Id_Categorie=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No category matching id " . $id);
+    }
     /**
      * Saves an article into the database.
      *

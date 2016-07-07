@@ -35,6 +35,18 @@ class ProductDAO extends DAO
         return $products;
 
     }
+    public function findProductsByStoreIdCategoryId($id_store, $id_category){
+        $sql = "select * from produit p INNER JOIN tl_produit_magasin t ON p.Id_Produit=t.Id_Produit INNER JOIN categorie c ON c.Id_Categorie = p.Id_Categorie WHERE t.Id_Magasin = ? AND c.Id_Categorie = ?";
+        $result = $this->getDb()->fetchAssoc($sql, array($id_store, $id_category));
+
+        // Convert query result to an array of domain objects
+        $products = array();
+        foreach ($result as $row) {
+            $productID = $row['Id_Produit'];
+            $products[$productID] = $this->buildDomainObject($row);
+        }
+        return $products;
+    }
     protected function buildDomainObject($row) {
         $product = new Product();
         $product->setId('Id_Produit');

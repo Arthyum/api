@@ -156,13 +156,13 @@ class ApiController {
      *
      * @return All products by category in JSON format
      */
-    public function getProductsByCategoriesAction(Application $app){
-        $categories = $app['dao.categorie']->findAll();
+    public function getProductsByCategoriesAction($id, Application $app){
+        $categories = $app['dao.category']->findAll();
         var_dump($categories);
         $responseData = array(array());
 
         foreach ($categories as $category) {
-            $products = $app['dao.product']->findAll();
+            $products = $app['dao.product']->findProductsByStoreIdCategoryId($id, $category->getId());
             //$products = $app['dao.product']->findProductByCategoryId($category->getId());
             var_dump($products);
         //    $responseData[] = $this->buildCategoryArray($category);
