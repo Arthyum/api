@@ -105,6 +105,15 @@ class ApiController {
         $responseData = $this->buildCategoryArray($category);
         return $app->json($responseData, 201);  // 201 = Created
     }
+    public function saveCart(Request$request, Application $app){
+        if (!$request->request->has('data')) {
+            return $app->json('Missing required parameter: idStore', 400);
+        }
+        $data[] = $request->request->get('data');
+        foreach ($data as $donnee){
+            
+        }
+    }
     /**
      * API category controller.
      *

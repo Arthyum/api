@@ -28,3 +28,5 @@ $app->get('/api/sells', "api\Controller\ApiController::getSellsAction");
 //API : get all sells
 $app->get('/api/stores', "api\Controller\ApiController::getShopsAction");
 
+$app->post('/api/cart/add', "api\Controller\ApiController::saveCart");
+
