@@ -106,23 +106,23 @@ class ApiController {
         return $app->json($responseData, 201);  // 201 = Created
     }
     public function saveCart(Request$request, Application $app){
-        if (!$request->request->has('data')) {
+        if (!$request->request->has('idStore')) {
             return $app->json('Missing required parameter: idStore', 400);
         }
-        $data[] = $request->request->get('data');
+        $idStore = $request->request->get('idStore');
         $products = array();
-        foreach ($data as $donnee){
-            $idStore = $donnee['idStore'];
-            $products = $donnee['products'];
+        $stocks = array();
+        $products = $request->request->get('products');
             foreach ($products as $product){
+                /* Sub qty from initial stock */
                 $stock = new Stock();
                 $stock->setIdProduct($product['id']);
                 $stock->setIdStore($idStore);
-                $quantity = $stock->getQuantity() - $app['dao.product']->getProductQuantity($stock->getIdProduct());
-                $stock->setQuantity($quantity);
-
+                $stock->setQuantity($product['qty']);
+                $app['dao.stock']->updateQuantity($stock);
+                $stocks = $stock;
             }
-        }
+        return $app->json($stocks, 201);  // 201 = Created
     }
     /**
      * API category controller.

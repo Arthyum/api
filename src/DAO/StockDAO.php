@@ -11,7 +11,7 @@ namespace api\DAO;
 use api\Domain\Stock;
 
 
-class StockDAO
+class StockDAO extends DAO
 {
     /**
      * Return a list of all articles, sorted by date (most recent first).
@@ -83,13 +83,15 @@ class StockDAO
     public function updateQuantity(Stock $stock){
         $idProduct = $stock->getIdProduct();
         $idStore = $stock->getIdStore();
-        $stock = $this->findStockByIdProductIdStore($idProduct, $idStore);
+        $quantity = $stock->getQuantity();
+        $stockTarget = $this->findStockByIdProductIdStore($idProduct, $idStore);
         $stockData = array(
-            'Id_Stock' => $stock->getIdStock(),
-            'Id_Magasin' => $stock->getIdStore(),
-            'Id_Produit' => $stock->getIdProduct(),
-            'Quantite' => $stock->getQuantity(),
+            'Id_Stock' => $stockTarget->getId(),
+            'Id_Magasin' => $stockTarget->getIdStore(),
+            'Id_Produit' => $stockTarget->getIdProduct(),
+            'Quantite' => $stockTarget->getQuantity() - $quantity,
         );
+
         $this->getDb()->update('stock', $stockData, array('Id_Stock' => $stock->getId()));
     }
     /**
