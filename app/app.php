@@ -76,6 +76,9 @@ $app['dao.country'] = $app->share(function ($app) {
 $app['dao.shop'] = $app->share(function ($app) {
     return new api\DAO\ShopDAO($app['db']);
 });
+$app['dao.stock'] = $app->share(function ($app) {
+    return new api\DAO\StockDAO($app['db']);
+});
 // Register error handler
 $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {

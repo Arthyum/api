@@ -54,9 +54,9 @@ class ProductDAO extends DAO
         if ($row)
             return $row['Prix_HT'];
         else
-            throw new \Exception("No product matching id " . $id);
+            //throw new \Exception("No product matching id " . $id);
 
-        return $products;
+        return "Unknown";
 
     }
     public function getProductQuantity($id) {
@@ -65,9 +65,9 @@ class ProductDAO extends DAO
         if ($row)
             return $row['Quantite'];
         else
-           // throw new \Exception("No product matching id " . $id);
+            //throw new \Exception("No product matching id " . $id);
 
-        return $products;
+        return "Unknown";
 
     }
     protected function buildDomainObject($row) {

@@ -110,8 +110,18 @@ class ApiController {
             return $app->json('Missing required parameter: idStore', 400);
         }
         $data[] = $request->request->get('data');
+        $products = array();
         foreach ($data as $donnee){
+            $idStore = $donnee['idStore'];
+            $products = $donnee['products'];
+            foreach ($products as $product){
+                $stock = new Stock();
+                $stock->setIdProduct($product['id']);
+                $stock->setIdStore($idStore);
+                $quantity = $stock->getQuantity() - $app['dao.product']->getProductQuantity($stock->getIdProduct());
+                $stock->setQuantity($quantity);
 
+            }
         }
     }
     /**
@@ -170,9 +180,7 @@ class ApiController {
         $responseData = array(array());
         foreach ($categories as $category) {
             $categoryData = $this->buildCategoryArray($category);
-
             $products = $app['dao.product']->findProductsByStoreIdCategoryId($id, $category->getId());
-
             foreach ($products as $product){
                 $tmp = array();
                 $tmp = $this->buildProductArray($product);
