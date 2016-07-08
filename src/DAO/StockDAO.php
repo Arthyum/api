@@ -89,10 +89,12 @@ class StockDAO extends DAO
             'Id_Stock' => $stockTarget->getId(),
             'Id_Magasin' => $stockTarget->getIdStore(),
             'Id_Produit' => $stockTarget->getIdProduct(),
-            'Quantite' => $stockTarget->getQuantity() - $quantity,
+            'Quantite' => $stockTarget->getQuantity(),
         );
+        $stockData['Quantite'] -= $quantity;
+        $stockData['Quantite'] = strval($stockData['Quantite']);
 
-        $this->getDb()->update('stock', $stockData, array('Id_Stock' => $stock->getId()));
+        $this->getDb()->update('stock', $stockData, array('Id_Stock' => $stockData['Id_Stock']));
     }
     /**
      * Removes an article from the database.
@@ -114,7 +116,7 @@ class StockDAO extends DAO
         $stock = new Stock();
         $stock->setId(($row['Id_Stock']));
         $stock->setIdStore(($row['Id_Magasin']));
-        $stock->setIdStore(($row['Id_Produit']));
+        $stock->setIdProduct(($row['Id_Produit']));
         $stock->setQuantity($row['Quantite']);
         return $stock;
     }

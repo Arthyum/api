@@ -3,6 +3,7 @@
 namespace api\Controller;
 
 use api\DAO\CountryDAO;
+use api\DAO\LtProductShopDAO;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use api\Domain\Article;
@@ -110,7 +111,7 @@ class ApiController {
             return $app->json('Missing required parameter: idStore', 400);
         }
         $idStore = $request->request->get('idStore');
-        $products = array();
+        $idClient = $request->request->get('idClient');
         $stocks = array();
         $products = $request->request->get('products');
             foreach ($products as $product){
@@ -121,6 +122,16 @@ class ApiController {
                 $stock->setQuantity($product['qty']);
                 $app['dao.stock']->updateQuantity($stock);
                 $stocks = $stock;
+
+                $sell = new Sell();
+                $sell->setIdClient($idClient);
+                $sell->setQuantity($product['qty']);
+                $sell->setDate(date("Y-m-d H:i:s"));
+
+                $ltProductShop = $app['dao.ltproductshop']->findByProductIdShopId($product['id'], $idStore);
+                $sell->setIdProductShop(  $ltProductShop->getId());
+
+                $app['dao.sell']->save($sell);
             }
         return $app->json($stocks, 201);  // 201 = Created
     }
@@ -178,6 +189,7 @@ class ApiController {
     public function getProductsByCategoriesAction($id, Application $app){
         $categories = $app['dao.category']->findAll();
         $responseData = array(array());
+        $productsData = array();
         foreach ($categories as $category) {
             $categoryData = $this->buildCategoryArray($category);
             $products = $app['dao.product']->findProductsByStoreIdCategoryId($id, $category->getId());
@@ -186,10 +198,12 @@ class ApiController {
                 $tmp = $this->buildProductArray($product);
                 $tmp['price'] = $app['dao.product']->getProductPrice($tmp['id']);
                 $tmp['quantity'] = $app['dao.product']->getProductQuantity($tmp['id']);
-                $categoryData['product'] = $tmp;
+
                 $productsData[] = $this->buildProductArray($product);
                 $responseData[] = $categoryData;
             }
+            $categoryData['products'] = $productsData;
+            $responseData = $categoryData;
         }
         return $app->json($responseData);
     }

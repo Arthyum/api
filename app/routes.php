@@ -13,11 +13,17 @@ $app->get('/login', "api\Controller\HomeController::loginAction")
 //API : add a category
 $app->post('/api/category/add', "api\Controller\ApiController::addCategoryAction");
 
+$app->post('/api/product/add', "api\Controller\ApiController::addProductAction");
+
 //API : get all categories
 $app->get('/api/categories', "api\Controller\ApiController::getCategoriesAction");
 
 //API : get all products
 $app->get('/api/products', "api\Controller\ApiController::getProductsAction");
+
+$app->get('/api/products/{id}', "api\Controller\ApiController::find");
+
+$app->get('/api/products/delete/{id}', "api\Controller\ApiController::delete");
 
 //API : get all categories
 $app->get('/api/productsbycategory/{id}', "api\Controller\ApiController::getProductsByCategoriesAction");

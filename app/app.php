@@ -79,6 +79,9 @@ $app['dao.shop'] = $app->share(function ($app) {
 $app['dao.stock'] = $app->share(function ($app) {
     return new api\DAO\StockDAO($app['db']);
 });
+$app['dao.ltproductshop'] = $app->share(function ($app) {
+    return new api\DAO\LtProductShopDAO($app['db']);
+});
 // Register error handler
 $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {

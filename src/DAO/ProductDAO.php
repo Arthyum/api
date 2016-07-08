@@ -24,6 +24,19 @@ class ProductDAO extends DAO
         }
         return $products;
     }
+    public function find($id) {
+        $sql = "select * from produit where Id_Produit=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No product matching id " . $id);
+    }
+    public function delete($id) {
+        // Delete the article
+        $this->getDb()->delete('produit', array('Id_Produit' => $id));
+    }
     public function findProductByCategoryId($id) {
         $sql = "select * from produit where Id_Categorie=?";
         $result = $this->getDb()->fetchAssoc($sql, array($id));

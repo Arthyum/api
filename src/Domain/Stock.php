@@ -19,10 +19,7 @@ class Stock
      * @var integer
      */
     private $id_store;
-    /**
-     * @var integer
-     */
-    private $id_stock;
+
 
     private $id_product;
 
@@ -41,21 +38,7 @@ class Stock
     {
         $this->id_product = $id_product;
     }
-    /**
-     * @return int
-     */
-    public function getIdStock()
-    {
-        return $this->id_stock;
-    }
 
-    /**
-     * @param int $id_stock
-     */
-    public function setIdStock($id_stock)
-    {
-        $this->id_stock = $id_stock;
-    }
     
     private $quantity;
 
